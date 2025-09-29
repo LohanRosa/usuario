@@ -1,0 +1,56 @@
+package com.javamaster.usuario.infrastructure.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+// explicação para uso do lombok uma das muitas que ele faz, aqui eu estou
+// colocando anotações de getters, setters e construtores ao inves de cria-los
+// pessoalmente clicando na classe com o botão direito e ir verbalizando muitas linhas de código
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "usuario")
+public class Usuario implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "nome", length = 1000)
+    private String nome;
+    @Column(name = "email", length = 1000)
+    private String email;
+    @Column(name = "senha")
+    private String senha;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private List<Endereco> enderecos;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private List<Telefone> telefones;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+}
