@@ -32,10 +32,10 @@ public class Usuario implements UserDetails {
     private String senha;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private List<Endereco> enderecos;
+    private List<Endereco> endereco;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private List<Telefone> telefones;
+    private List<Telefone> telefone;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
