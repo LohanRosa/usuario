@@ -26,6 +26,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO usuarioDTO){
         return ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDTO));
     }
+
     @PostMapping("/login")
     public String login(@RequestBody UsuarioDTO usuarioDTO){
         Authentication authentication = authenticationManager.authenticate(
@@ -53,7 +54,7 @@ public class UsuarioController {
 
     @PutMapping("/endereco")
     public ResponseEntity<EnderecoDTO> atualizaEndereco(@RequestBody EnderecoDTO dto,
-                                                             @RequestParam("id") Long id){
+                                                        @RequestParam("id") Long id){
         return ResponseEntity.ok(usuarioService.atualizaEndereco(id, dto));
     }
 
