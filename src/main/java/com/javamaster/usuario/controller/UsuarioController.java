@@ -6,6 +6,9 @@ import com.javamaster.usuario.business.dto.EnderecoDTO;
 import com.javamaster.usuario.business.dto.TelefoneDTO;
 import com.javamaster.usuario.business.dto.UsuarioDTO;
 import com.javamaster.usuario.infrastructure.security.JwtUtil;
+import com.javamaster.usuario.infrastructure.security.SecurityConfig;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
+@Tag(name = "Tarefas", description = "Cadastra tarefas de usuários")
+@SecurityRequirement(name = SecurityConfig.SECURITY_SCHEME)
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
