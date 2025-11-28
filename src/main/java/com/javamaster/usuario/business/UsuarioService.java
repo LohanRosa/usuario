@@ -9,11 +9,18 @@ import com.javamaster.usuario.infrastructure.entity.Telefone;
 import com.javamaster.usuario.infrastructure.entity.Usuario;
 import com.javamaster.usuario.infrastructure.exceptions.ConflictException;
 import com.javamaster.usuario.infrastructure.exceptions.ResourceNotFoundException;
+import com.javamaster.usuario.infrastructure.exceptions.UnauthorizedException;
 import com.javamaster.usuario.infrastructure.repository.EnderecoRepository;
 import com.javamaster.usuario.infrastructure.repository.TelefoneRepository;
 import com.javamaster.usuario.infrastructure.repository.UsuarioRepository;
 import com.javamaster.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +32,7 @@ public class UsuarioService {
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
     private final EnderecoRepository enderecoRepository;
     private final TelefoneRepository telefoneRepository;
 
@@ -37,18 +45,18 @@ public class UsuarioService {
         );
     }
 
-//    public String autenticarUsuario(UsuarioDTO usuarioDTO) {
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(),
-//                            usuarioDTO.getSenha())
-//            );
-//            return "Bearer " + jwtUtil.generateToken(authentication.getName());
-//
-//        } catch (BadCredentialsException | UsernameNotFoundException | AuthorizationDeniedException e) {
-//            throw new UnauthorizedException("Usuário ou senha inválidos: ", e.getCause());
-//        }
-//    }
+    public String autenticarUsuario(UsuarioDTO usuarioDTO) throws UnauthorizedException {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(),
+                            usuarioDTO.getSenha())
+            );
+            return "Bearer " + jwtUtil.generateToken(authentication.getName());
+
+        } catch (BadCredentialsException | UsernameNotFoundException | AuthorizationDeniedException e) {
+            throw new UnauthorizedException("Usuário ou senha inválidos: ", e.getCause());
+        }
+    }
 
     public void emailExiste(String email) {
         try {
